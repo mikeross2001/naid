@@ -1,6 +1,16 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { RestaurantCard } from '@/components/restaurant/RestaurantCard';
+import type { Restaurant } from '@/types/database';
+
+interface FavoriteWithRestaurant {
+  id: string;
+  user_id: string;
+  restaurant_id: string;
+  list_name: string;
+  created_at: string;
+  restaurant: Restaurant | null;
+}
 
 export default async function FavoritesPage() {
   const supabase = await createClient();
@@ -22,8 +32,8 @@ export default async function FavoritesPage() {
     .order('created_at', { ascending: false });
 
   // Group by list_name
-  const lists: Record<string, NonNullable<typeof favorites>> = {};
-  favorites?.forEach((fav) => {
+  const lists: Record<string, FavoriteWithRestaurant[]> = {};
+  (favorites as FavoriteWithRestaurant[] | null)?.forEach((fav: FavoriteWithRestaurant) => {
     if (!lists[fav.list_name]) {
       lists[fav.list_name] = [];
     }

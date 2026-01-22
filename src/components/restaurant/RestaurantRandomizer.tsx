@@ -90,7 +90,7 @@ export function RestaurantRandomizer() {
 
         if (data) {
           // Exclude cafes and coffee shops from the randomizer
-          const filtered = data.filter(r =>
+          const filtered = (data as Restaurant[]).filter((r: Restaurant) =>
             r.cuisine_type !== 'cafe' && r.cuisine_type !== 'coffee'
           );
           setAllRestaurants(filtered);

@@ -4,6 +4,9 @@ import { ReviewCard } from '@/components/restaurant/ReviewCard';
 import { FollowButton } from '@/components/user/FollowButton';
 import { User, Calendar } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import type { Review, Restaurant } from '@/types/database';
+
+type ReviewWithRestaurant = Review & { restaurant: Restaurant | null };
 
 interface PageProps {
   params: Promise<{ username: string }>;
@@ -134,7 +137,7 @@ export default async function UserProfilePage({ params }: PageProps) {
 
         {reviews && reviews.length > 0 ? (
           <div className="space-y-4">
-            {reviews.map((review) => (
+            {(reviews as ReviewWithRestaurant[]).map((review: ReviewWithRestaurant) => (
               <div key={review.id}>
                 {review.restaurant && (
                   <a

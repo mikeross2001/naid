@@ -6,6 +6,18 @@ import { ReviewCard } from '@/components/restaurant/ReviewCard';
 import { FollowStats } from '@/components/user/FollowStats';
 import { User, Settings, MapPin, Calendar } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import type { Restaurant, Review } from '@/types/database';
+
+interface FavoriteWithRestaurant {
+  id: string;
+  user_id: string;
+  restaurant_id: string;
+  list_name: string;
+  created_at: string;
+  restaurant: Restaurant | null;
+}
+
+type ReviewWithRestaurant = Review & { restaurant: Restaurant | null };
 
 export default async function ProfilePage() {
   const supabase = await createClient();
@@ -133,7 +145,7 @@ export default async function ProfilePage() {
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {favorites.map((fav) => (
+            {(favorites as FavoriteWithRestaurant[]).map((fav: FavoriteWithRestaurant) => (
               fav.restaurant && <RestaurantCard key={fav.id} restaurant={fav.restaurant} />
             ))}
           </div>
@@ -148,7 +160,7 @@ export default async function ProfilePage() {
 
         {reviews && reviews.length > 0 ? (
           <div className="space-y-4">
-            {reviews.map((review) => (
+            {(reviews as ReviewWithRestaurant[]).map((review: ReviewWithRestaurant) => (
               <div key={review.id}>
                 {review.restaurant && (
                   <Link

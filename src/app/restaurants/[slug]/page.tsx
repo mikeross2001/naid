@@ -8,6 +8,9 @@ import { ReviewCard } from '@/components/restaurant/ReviewCard';
 import { FavoriteButton } from '@/components/restaurant/FavoriteButton';
 import { WriteReviewButton } from '@/components/restaurant/WriteReviewButton';
 import { MapPin, Phone, Globe, ArrowLeft } from 'lucide-react';
+import type { Review, Profile } from '@/types/database';
+
+type ReviewWithProfile = Review & { profile: Profile | null };
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -176,7 +179,7 @@ export default async function RestaurantPage({ params }: PageProps) {
 
           {reviews && reviews.length > 0 ? (
             <div className="space-y-4">
-              {reviews.map((review) => (
+              {(reviews as ReviewWithProfile[]).map((review: ReviewWithProfile) => (
                 <ReviewCard key={review.id} review={review} />
               ))}
             </div>

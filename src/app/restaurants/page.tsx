@@ -5,6 +5,7 @@ import { CuisineFilter } from '@/components/restaurant/CuisineFilter';
 import { DistrictFilter } from '@/components/restaurant/DistrictFilter';
 import { SortFilter } from '@/components/restaurant/SortFilter';
 import Link from 'next/link';
+import type { Restaurant } from '@/types/database';
 
 const CUISINE_EMOJIS: Record<string, string> = {
   thai: '🍜',
@@ -163,7 +164,7 @@ export default async function RestaurantsPage({ searchParams }: PageProps) {
             {/* Grid of remaining cards */}
             {remainingRestaurants.length > 0 && (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {remainingRestaurants.map((restaurant) => (
+                {(remainingRestaurants as Restaurant[]).map((restaurant: Restaurant) => (
                   <RestaurantCard key={restaurant.id} restaurant={restaurant} />
                 ))}
               </div>
