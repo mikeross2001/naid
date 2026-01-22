@@ -54,7 +54,7 @@ export default function HomePage() {
             }}
           >
             <span className="text-5xl md:text-6xl">{cuisine.emoji}</span>
-            <span className="text-[10px] md:text-xs text-gray-400 font-medium">{cuisine.label}</span>
+            <span className="text-[10px] md:text-xs text-gray-900 font-medium">{cuisine.label}</span>
           </Link>
         );
       })}
@@ -65,22 +65,22 @@ export default function HomePage() {
           className="font-display text-[10rem] md:text-[14rem] leading-none tracking-tight text-gray-900 pointer-events-auto"
           style={{ letterSpacing: '-0.03em' }}
         >
-          NaiD
+          NaiD?
         </h1>
         <p className="text-gray-900 text-lg mt-2 tracking-wide">
-          where's good?
+          end the food debate
         </p>
+
+        <div className="mt-8">
+          <RestaurantRandomizer />
+        </div>
 
         <Link
           href="/restaurants"
-          className="mt-8 text-gray-400 hover:text-gray-900 text-sm transition-colors pointer-events-auto"
+          className="mt-6 text-gray-400 hover:text-gray-900 text-sm transition-colors pointer-events-auto"
         >
           browse all →
         </Link>
-
-        <div className="mt-6">
-          <RestaurantRandomizer />
-        </div>
       </div>
     </div>
   );
