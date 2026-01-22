@@ -84,10 +84,6 @@ function Confetti() {
 type CategoryChoice = 'restaurant' | 'bar' | null;
 type GamePhase = 'idle' | 'thinking' | 'reveal';
 
-// Rigged spins - force Silo for next N spins
-let riggedSpinsRemaining = 2;
-const RIGGED_SLUG = 'silo';
-
 export function RestaurantRandomizer() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -150,20 +146,8 @@ export function RestaurantRandomizer() {
     setThinkingMessageIndex(0);
 
     // Pick the winner first
-    let selectedWinner: Restaurant;
-
-    // Check if rigged
-    const riggedRestaurant = riggedSpinsRemaining > 0
-      ? filteredList.find(r => r.slug === RIGGED_SLUG)
-      : null;
-
-    if (riggedRestaurant) {
-      selectedWinner = riggedRestaurant;
-      riggedSpinsRemaining--;
-    } else {
-      const winnerIndex = Math.floor(Math.random() * filteredList.length);
-      selectedWinner = filteredList[winnerIndex];
-    }
+    const winnerIndex = Math.floor(Math.random() * filteredList.length);
+    const selectedWinner = filteredList[winnerIndex];
 
     // Phase 1: Thinking messages (cycle through them)
     let messageIndex = 0;
