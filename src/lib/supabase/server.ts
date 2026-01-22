@@ -1,6 +1,26 @@
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
+// Chainable mock for build time
+const createChainMock = (): any => {
+  const mock: any = {
+    data: [],
+    error: null,
+    count: 0,
+  };
+  const chainable = () => createChainMock();
+  mock.select = chainable;
+  mock.order = chainable;
+  mock.eq = chainable;
+  mock.or = chainable;
+  mock.single = () => ({ data: null, error: null });
+  mock.limit = chainable;
+  mock.insert = chainable;
+  mock.update = chainable;
+  mock.delete = chainable;
+  return mock;
+};
+
 export async function createClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -11,16 +31,7 @@ export async function createClient() {
       auth: {
         getUser: async () => ({ data: { user: null }, error: null }),
       },
-      from: () => ({
-        select: () => ({
-          data: [],
-          error: null,
-          order: () => ({ data: [], error: null }),
-          eq: () => ({ data: null, error: null, single: () => ({ data: null, error: null }) }),
-          single: () => ({ data: null, error: null }),
-          limit: () => ({ data: [], error: null }),
-        }),
-      }),
+      from: () => createChainMock(),
     } as ReturnType<typeof createServerClient>;
   }
 
