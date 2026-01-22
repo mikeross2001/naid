@@ -36,6 +36,13 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'img.wongnai.com' },
       // Coconuts Media
       { protocol: 'https', hostname: 'cdn.coconuts.co' },
+      // Restaurant Guru
+      { protocol: 'https', hostname: 'img.restaurantguru.com' },
+      { protocol: 'https', hostname: 'img3.restaurantguru.com' },
+      // Restaurant websites
+      { protocol: 'https', hostname: 'sushizobangkok.com' },
+      { protocol: 'https', hostname: 'thai-gohan.com' },
+      { protocol: 'https', hostname: 'www.chowtraveller.com' },
     ],
   },
 };
