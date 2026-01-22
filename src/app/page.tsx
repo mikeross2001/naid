@@ -36,20 +36,25 @@ const POSITIONS = [
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
-      {/* Static cuisine emojis */}
+      {/* Gently floating cuisine emojis */}
       {CUISINES.map((cuisine, index) => {
         const pos = POSITIONS[index % POSITIONS.length];
+        const baseTransform = `rotate(${pos.rotate}) scale(${pos.scale})`;
+        const floatDuration = 5 + (index % 4) * 1.5; // 5s to 9.5s
+        const floatDelay = (index * 0.4) % 3; // stagger the animations
         return (
           <Link
             key={cuisine.value}
             href={`/restaurants?cuisine=${cuisine.value}`}
-            className="absolute z-20 flex flex-col items-center gap-1 hover:scale-110 transition-transform duration-200 cursor-pointer select-none"
+            className="absolute z-20 flex flex-col items-center gap-1 hover:scale-110 transition-transform duration-200 cursor-pointer select-none animate-gentle-float"
             style={{
               top: pos.top,
               bottom: pos.bottom,
               left: pos.left,
               right: pos.right,
-              transform: `rotate(${pos.rotate}) scale(${pos.scale})`,
+              ['--base-transform' as string]: baseTransform,
+              ['--float-duration' as string]: `${floatDuration}s`,
+              ['--float-delay' as string]: `${floatDelay}s`,
             }}
           >
             <span className="text-5xl md:text-6xl">{cuisine.emoji}</span>

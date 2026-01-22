@@ -213,3 +213,24 @@ body {
 .animate-fade-in {
   animation: fade-in 0.3s ease-out forwards;
 }
+
+/* Gentle float for cuisine emojis */
+@keyframes gentle-float {
+  0%, 100% {
+    transform: var(--base-transform) translateY(0px) translateX(0px);
+  }
+  25% {
+    transform: var(--base-transform) translateY(-6px) translateX(3px);
+  }
+  50% {
+    transform: var(--base-transform) translateY(-3px) translateX(-2px);
+  }
+  75% {
+    transform: var(--base-transform) translateY(-8px) translateX(2px);
+  }
+}
+
+.animate-gentle-float {
+  animation: gentle-float var(--float-duration, 6s) ease-in-out infinite;
+  animation-delay: var(--float-delay, 0s);
+}
