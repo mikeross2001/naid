@@ -17,7 +17,6 @@ const CUISINES = [
   { value: 'vegetarian', label: 'vegetarian', emoji: '🥗' },
 ];
 
-// Spread out positions - no emojis too close together
 const POSITIONS = [
   { top: '6%', left: '8%', rotate: '-12deg', scale: 1.1 },
   { top: '5%', right: '25%', rotate: '8deg', scale: 1.0 },
@@ -37,7 +36,7 @@ const POSITIONS = [
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
-      {/* Floating Emojis - high z-index so they're clickable */}
+      {/* Static cuisine emojis */}
       {CUISINES.map((cuisine, index) => {
         const pos = POSITIONS[index % POSITIONS.length];
         return (
