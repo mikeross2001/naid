@@ -52,6 +52,9 @@ export const mockRestaurants: Restaurant[] = [
     submitted_by: null,
     created_at: '2024-01-01T00:00:00Z',
     updated_at: '2024-01-01T00:00:00Z',
+    meal_times: ['dinner'],
+    vibes: ['date_night', 'fancy'],
+    late_night: false,
   },
   {
     id: '2',
@@ -74,6 +77,9 @@ export const mockRestaurants: Restaurant[] = [
     submitted_by: null,
     created_at: '2024-01-02T00:00:00Z',
     updated_at: '2024-01-02T00:00:00Z',
+    meal_times: ['breakfast', 'lunch', 'dinner'],
+    vibes: ['cheap_fast', 'solo', 'comfort'],
+    late_night: false,
   },
   {
     id: '3',
@@ -96,6 +102,9 @@ export const mockRestaurants: Restaurant[] = [
     submitted_by: null,
     created_at: '2024-01-03T00:00:00Z',
     updated_at: '2024-01-03T00:00:00Z',
+    meal_times: ['dinner'],
+    vibes: ['date_night', 'fancy'],
+    late_night: false,
   },
   {
     id: '4',
@@ -118,6 +127,9 @@ export const mockRestaurants: Restaurant[] = [
     submitted_by: null,
     created_at: '2024-01-04T00:00:00Z',
     updated_at: '2024-01-04T00:00:00Z',
+    meal_times: ['dinner'],
+    vibes: ['date_night', 'fancy'],
+    late_night: false,
   },
   {
     id: '5',
@@ -140,6 +152,9 @@ export const mockRestaurants: Restaurant[] = [
     submitted_by: null,
     created_at: '2024-01-05T00:00:00Z',
     updated_at: '2024-01-05T00:00:00Z',
+    meal_times: ['lunch', 'dinner'],
+    vibes: ['comfort', 'with_crew', 'drunk_food'],
+    late_night: false,
   },
   {
     id: '6',
@@ -162,6 +177,9 @@ export const mockRestaurants: Restaurant[] = [
     submitted_by: null,
     created_at: '2024-01-06T00:00:00Z',
     updated_at: '2024-01-06T00:00:00Z',
+    meal_times: ['lunch', 'dinner'],
+    vibes: ['cheap_fast', 'solo', 'comfort'],
+    late_night: false,
   },
   {
     id: '7',
@@ -184,6 +202,9 @@ export const mockRestaurants: Restaurant[] = [
     submitted_by: null,
     created_at: '2024-01-07T00:00:00Z',
     updated_at: '2024-01-07T00:00:00Z',
+    meal_times: ['lunch', 'dinner'],
+    vibes: ['date_night', 'with_crew'],
+    late_night: false,
   },
   {
     id: '8',
@@ -206,6 +227,9 @@ export const mockRestaurants: Restaurant[] = [
     submitted_by: null,
     created_at: '2024-01-08T00:00:00Z',
     updated_at: '2024-01-08T00:00:00Z',
+    meal_times: ['lunch', 'dinner'],
+    vibes: ['date_night', 'with_crew'],
+    late_night: false,
   },
   {
     id: '9',
@@ -228,6 +252,9 @@ export const mockRestaurants: Restaurant[] = [
     submitted_by: null,
     created_at: '2024-01-09T00:00:00Z',
     updated_at: '2024-01-09T00:00:00Z',
+    meal_times: ['breakfast', 'lunch', 'dinner'],
+    vibes: ['cheap_fast', 'solo', 'comfort'],
+    late_night: false,
   },
   {
     id: '10',
@@ -250,6 +277,9 @@ export const mockRestaurants: Restaurant[] = [
     submitted_by: null,
     created_at: '2024-01-10T00:00:00Z',
     updated_at: '2024-01-10T00:00:00Z',
+    meal_times: ['dinner'],
+    vibes: ['date_night', 'fancy'],
+    late_night: false,
   },
   {
     id: '11',
@@ -272,6 +302,9 @@ export const mockRestaurants: Restaurant[] = [
     submitted_by: null,
     created_at: '2024-01-11T00:00:00Z',
     updated_at: '2024-01-11T00:00:00Z',
+    meal_times: ['breakfast', 'lunch'],
+    vibes: ['cafe', 'solo'],
+    late_night: false,
   },
   {
     id: '12',
@@ -294,6 +327,9 @@ export const mockRestaurants: Restaurant[] = [
     submitted_by: null,
     created_at: '2024-01-12T00:00:00Z',
     updated_at: '2024-01-12T00:00:00Z',
+    meal_times: ['lunch', 'dinner'],
+    vibes: ['comfort', 'with_crew', 'drunk_food'],
+    late_night: false,
   },
 ];
 

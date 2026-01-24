@@ -15,7 +15,7 @@ const oswald = Oswald({
 });
 
 export const metadata: Metadata = {
-  title: "NaiD - Find the Best Restaurants in Bangkok",
+  title: "NaiD - End the Food Debate",
   description: "Discover and rank the best restaurants by cuisine in Bangkok. Read reviews, save favorites, and follow food lovers.",
   keywords: ["restaurants", "Bangkok", "food", "reviews", "Thai food", "dining"],
 };

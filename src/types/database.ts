@@ -8,6 +8,19 @@ export interface Profile {
   updated_at: string;
 }
 
+// Filter-related types
+export type MealTime = 'breakfast' | 'lunch' | 'dinner' | 'late_night';
+export type VibeTag = 'date_night' | 'cheap_fast' | 'drunk_food' | 'comfort' | 'fancy' | 'cafe' | 'with_crew' | 'solo';
+export type BudgetFilter = 'budget' | 'moderate' | 'upscale' | 'no_limit';
+export type AreaFilter = 'sukhumvit' | 'silom_sathorn' | 'thonglor_ekkamai' | 'ari' | 'siam' | 'old_town' | 'anywhere';
+
+export interface FilterState {
+  budget: BudgetFilter;
+  mealTime: MealTime | 'any';
+  vibes: VibeTag[];
+  area: AreaFilter;
+}
+
 export interface Restaurant {
   id: string;
   name: string;
@@ -29,6 +42,10 @@ export interface Restaurant {
   submitted_by: string | null;
   created_at: string;
   updated_at: string;
+  // Filter columns
+  meal_times: MealTime[];
+  vibes: VibeTag[];
+  late_night: boolean;
 }
 
 export interface Review {
@@ -117,4 +134,63 @@ export const BANGKOK_DISTRICTS = [
   'On Nut',
   'Phra Khanong',
   'Other',
+];
+
+// District to Area mapping for filter grouping
+export const DISTRICT_TO_AREA: Record<string, AreaFilter> = {
+  'Sukhumvit': 'sukhumvit',
+  'On Nut': 'sukhumvit',
+  'Phra Khanong': 'sukhumvit',
+  'Bang Na': 'sukhumvit',
+  'Thonglor': 'thonglor_ekkamai',
+  'Ekkamai': 'thonglor_ekkamai',
+  'Silom': 'silom_sathorn',
+  'Sathorn': 'silom_sathorn',
+  'Riverside': 'silom_sathorn',
+  'Ari': 'ari',
+  'Ladprao': 'ari',
+  'Chatuchak': 'ari',
+  'Ratchada': 'ari',
+  'Ratchathewi': 'ari', // Victory Monument area
+  'Siam': 'siam',
+  'Old Town': 'old_town',
+  'Chinatown': 'old_town',
+  'Khao San': 'old_town',
+};
+
+// Filter option definitions with emojis for UI
+export const BUDGET_OPTIONS: { value: BudgetFilter; label: string; emoji: string }[] = [
+  { value: 'budget', label: '฿', emoji: '💸' },
+  { value: 'moderate', label: '฿฿', emoji: '💰' },
+  { value: 'upscale', label: '฿฿฿', emoji: '💎' },
+  { value: 'no_limit', label: 'No limit', emoji: '🎰' },
+];
+
+export const MEAL_TIME_OPTIONS: { value: MealTime | 'any'; label: string; emoji: string }[] = [
+  { value: 'any', label: 'Any', emoji: '🕐' },
+  { value: 'breakfast', label: 'Breakfast', emoji: '🌅' },
+  { value: 'lunch', label: 'Lunch', emoji: '☀️' },
+  { value: 'dinner', label: 'Dinner', emoji: '🌙' },
+  { value: 'late_night', label: 'Late', emoji: '🌃' },
+];
+
+export const VIBE_OPTIONS: { value: VibeTag; label: string; emoji: string }[] = [
+  { value: 'date_night', label: 'Date Night', emoji: '❤️' },
+  { value: 'cheap_fast', label: 'Cheap & Fast', emoji: '⚡' },
+  { value: 'drunk_food', label: 'Drunk Food', emoji: '🍻' },
+  { value: 'comfort', label: 'Comfort', emoji: '🛋️' },
+  { value: 'fancy', label: 'Fancy', emoji: '✨' },
+  { value: 'cafe', label: 'Cafe Vibes', emoji: '☕' },
+  { value: 'with_crew', label: 'With Crew', emoji: '👯' },
+  { value: 'solo', label: 'Solo', emoji: '🎧' },
+];
+
+export const AREA_OPTIONS: { value: AreaFilter; label: string; emoji: string }[] = [
+  { value: 'anywhere', label: 'Anywhere', emoji: '🌍' },
+  { value: 'sukhumvit', label: 'Sukhumvit', emoji: '🚇' },
+  { value: 'thonglor_ekkamai', label: 'Thonglor/Ekkamai', emoji: '🌃' },
+  { value: 'silom_sathorn', label: 'Silom/Sathorn', emoji: '🏙️' },
+  { value: 'ari', label: 'Ari Area', emoji: '🌿' },
+  { value: 'siam', label: 'Siam', emoji: '🛍️' },
+  { value: 'old_town', label: 'Old Town', emoji: '🏛️' },
 ];

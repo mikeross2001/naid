@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import type { Restaurant } from '@/types/database';
+import type { Restaurant, FilterState } from '@/types/database';
 import { X, Sparkles } from 'lucide-react';
+import { FilterPanel } from './FilterPanel';
+import { filterRestaurants, getDefaultFilterState } from '@/lib/filters';
 
 // Rotating button copy options
 const BUTTON_COPIES = [
@@ -82,7 +84,7 @@ function Confetti() {
 }
 
 type CategoryChoice = 'restaurant' | 'bar' | null;
-type GamePhase = 'idle' | 'thinking' | 'reveal';
+type GamePhase = 'idle' | 'filters' | 'thinking' | 'reveal';
 
 export function RestaurantRandomizer() {
   const router = useRouter();
@@ -97,6 +99,7 @@ export function RestaurantRandomizer() {
   const [buttonCopyIndex, setButtonCopyIndex] = useState(0);
   const [gamePhase, setGamePhase] = useState<GamePhase>('idle');
   const [thinkingMessageIndex, setThinkingMessageIndex] = useState(0);
+  const [filters, setFilters] = useState<FilterState>(getDefaultFilterState());
 
   // Rotate button copy every 3 seconds
   useEffect(() => {
@@ -129,16 +132,22 @@ export function RestaurantRandomizer() {
 
   const selectCategory = (choice: CategoryChoice) => {
     setCategory(choice);
-    if (choice === 'bar') {
-      setFilteredList(allRestaurants.filter(r => r.cuisine_type === 'bar'));
-    } else if (choice === 'restaurant') {
-      setFilteredList(allRestaurants.filter(r => r.cuisine_type !== 'bar'));
-    }
+    setGamePhase('filters');
+    // Reset filters with fresh auto-detected meal time
+    setFilters(getDefaultFilterState());
   };
 
-  const spin = useCallback(() => {
-    if (filteredList.length === 0 || isSpinning) return;
+  // Calculate filtered restaurants based on filters
+  const filteredByFilters = useMemo(() => {
+    if (!category) return [];
+    return filterRestaurants(allRestaurants, filters, category);
+  }, [allRestaurants, filters, category]);
 
+  const spin = useCallback(() => {
+    if (filteredByFilters.length === 0 || isSpinning) return;
+
+    // Set the filtered list for the shuffle animation
+    setFilteredList(filteredByFilters);
     setIsSpinning(true);
     setWinner(null);
     setShowConfetti(false);
@@ -146,8 +155,8 @@ export function RestaurantRandomizer() {
     setThinkingMessageIndex(0);
 
     // Pick the winner first
-    const winnerIndex = Math.floor(Math.random() * filteredList.length);
-    const selectedWinner = filteredList[winnerIndex];
+    const winnerIndex = Math.floor(Math.random() * filteredByFilters.length);
+    const selectedWinner = filteredByFilters[winnerIndex];
 
     // Phase 1: Thinking messages (cycle through them)
     let messageIndex = 0;
@@ -191,7 +200,7 @@ export function RestaurantRandomizer() {
       animate();
     }, 2400);
 
-  }, [filteredList, isSpinning]);
+  }, [filteredByFilters, isSpinning]);
 
   const handleOpen = () => {
     setIsOpen(true);
@@ -201,6 +210,7 @@ export function RestaurantRandomizer() {
     setCategory(null);
     setFilteredList([]);
     setGamePhase('idle');
+    setFilters(getDefaultFilterState());
   };
 
   const handleClose = () => {
@@ -212,14 +222,20 @@ export function RestaurantRandomizer() {
     setCategory(null);
     setFilteredList([]);
     setGamePhase('idle');
+    setFilters(getDefaultFilterState());
   };
 
   const handleBack = () => {
-    setCategory(null);
-    setFilteredList([]);
-    setWinner(null);
-    setDisplayedRestaurant(null);
-    setGamePhase('idle');
+    if (gamePhase === 'filters') {
+      // Go back to category selection
+      setCategory(null);
+      setGamePhase('idle');
+    } else {
+      // Go back to filters from spin result
+      setWinner(null);
+      setDisplayedRestaurant(null);
+      setGamePhase('filters');
+    }
   };
 
   const goToRestaurant = () => {
@@ -322,6 +338,44 @@ export function RestaurantRandomizer() {
                     ← Back
                   </button>
 
+                  {/* Game Phase: Filters */}
+                  {gamePhase === 'filters' && (
+                    <>
+                      <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                        {category === 'bar' ? '🍸 Drinks Time' : '🍽️ Let\'s Eat'}
+                      </h2>
+                      <p className="text-gray-500 mb-5">
+                        Dial in your vibe
+                      </p>
+
+                      <div className="text-left">
+                        <FilterPanel
+                          filters={filters}
+                          onFiltersChange={setFilters}
+                          matchCount={filteredByFilters.length}
+                          category={category}
+                        />
+                      </div>
+
+                      <button
+                        onClick={spin}
+                        disabled={filteredByFilters.length === 0}
+                        className={`
+                          w-full py-5 rounded-2xl font-bold text-xl transition-all duration-300 mt-5
+                          ${filteredByFilters.length === 0
+                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                            : 'bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 text-white hover:shadow-xl hover:scale-[1.02] active:scale-95'
+                          }
+                        `}
+                      >
+                        <span className="flex items-center justify-center gap-2">
+                          <span className="animate-bounce">🎲</span>
+                          Spin the Wheel!
+                        </span>
+                      </button>
+                    </>
+                  )}
+
                   {/* Game Phase: Thinking */}
                   {gamePhase === 'thinking' && (
                     <div className="py-8">
@@ -339,20 +393,14 @@ export function RestaurantRandomizer() {
                     </div>
                   )}
 
-                  {/* Game Phase: Reveal / Idle */}
-                  {(gamePhase === 'reveal' || gamePhase === 'idle') && (
+                  {/* Game Phase: Reveal */}
+                  {gamePhase === 'reveal' && (
                     <>
                       <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                        {winner
-                          ? '🎉 Winner!'
-                          : category === 'bar'
-                            ? '🍸 Drinks Time'
-                            : '🍽️ Let\'s Eat'}
+                        {winner ? '🎉 Winner!' : category === 'bar' ? '🍸 Drinks Time' : '🍽️ Let\'s Eat'}
                       </h2>
                       <p className="text-gray-500 mb-6">
-                        {winner
-                          ? 'The universe has spoken'
-                          : `${filteredList.length} options, one destiny`}
+                        {winner ? 'The universe has spoken' : `${filteredList.length} options, one destiny`}
                       </p>
 
                       {/* Result Display */}
@@ -400,31 +448,7 @@ export function RestaurantRandomizer() {
                       </div>
 
                       {/* Action Buttons */}
-                      {!winner ? (
-                        <button
-                          onClick={spin}
-                          disabled={isSpinning || filteredList.length === 0}
-                          className={`
-                            w-full py-5 rounded-2xl font-bold text-xl transition-all duration-300
-                            ${isSpinning
-                              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                              : 'bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 text-white hover:shadow-xl hover:scale-[1.02] active:scale-95'
-                            }
-                          `}
-                        >
-                          {isSpinning ? (
-                            <span className="flex items-center justify-center gap-2">
-                              <span className="animate-spin">🎲</span>
-                              Spinning...
-                            </span>
-                          ) : (
-                            <span className="flex items-center justify-center gap-2">
-                              <span className="animate-bounce">🎲</span>
-                              Spin the Wheel!
-                            </span>
-                          )}
-                        </button>
-                      ) : (
+                      {winner && (
                         <div className="space-y-3">
                           <button
                             onClick={goToRestaurant}
@@ -436,8 +460,7 @@ export function RestaurantRandomizer() {
                             onClick={() => {
                               setWinner(null);
                               setDisplayedRestaurant(null);
-                              setGamePhase('idle');
-                              spin();
+                              setGamePhase('filters');
                             }}
                             className="w-full py-4 rounded-xl font-medium text-gray-600 hover:bg-gray-100 transition-all"
                           >
