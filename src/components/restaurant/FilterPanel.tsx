@@ -1,18 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import type {
   FilterState,
   BudgetFilter,
   MealTime,
   VibeTag,
-  AreaFilter,
 } from '@/types/database';
 import {
   BUDGET_OPTIONS,
   MEAL_TIME_OPTIONS,
   VIBE_OPTIONS,
-  AREA_OPTIONS,
 } from '@/types/database';
 
 interface FilterPanelProps {
@@ -58,10 +56,6 @@ export function FilterPanel({
         vibes: [...currentVibes, value],
       });
     }
-  };
-
-  const handleAreaChange = (value: AreaFilter) => {
-    onFiltersChange({ ...filters, area: value });
   };
 
   return (
@@ -163,25 +157,6 @@ export function FilterPanel({
             Max 2 vibes! Remove one first.
           </p>
         )}
-      </div>
-
-      {/* Area Selector */}
-      <div>
-        <div className="flex items-center gap-2 mb-2">
-          <span className="text-lg">📍</span>
-          <span className="text-sm font-medium text-gray-700">Where?</span>
-        </div>
-        <select
-          value={filters.area}
-          onChange={(e) => handleAreaChange(e.target.value as AreaFilter)}
-          className="w-full py-2.5 px-4 rounded-xl bg-gray-100 text-gray-700 font-medium border-0 focus:ring-2 focus:ring-purple-400 transition-all"
-        >
-          {AREA_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.emoji} {option.label}
-            </option>
-          ))}
-        </select>
       </div>
 
       {/* Match Count */}

@@ -160,10 +160,9 @@ export const DISTRICT_TO_AREA: Record<string, AreaFilter> = {
 
 // Filter option definitions with emojis for UI
 export const BUDGET_OPTIONS: { value: BudgetFilter; label: string; emoji: string }[] = [
-  { value: 'budget', label: '฿', emoji: '💸' },
-  { value: 'moderate', label: '฿฿', emoji: '💰' },
-  { value: 'upscale', label: '฿฿฿', emoji: '💎' },
-  { value: 'no_limit', label: 'No limit', emoji: '🎰' },
+  { value: 'budget', label: 'Cheap', emoji: '💸' },
+  { value: 'upscale', label: 'Expensive', emoji: '💎' },
+  { value: 'no_limit', label: 'Any', emoji: '🎰' },
 ];
 
 export const MEAL_TIME_OPTIONS: { value: MealTime | 'any'; label: string; emoji: string }[] = [

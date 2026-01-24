@@ -15,9 +15,8 @@ export function filterRestaurants(
     if (category === 'restaurant' && r.cuisine_type === 'bar') return false;
 
     // Budget filter (maps to existing price_range)
-    if (filters.budget === 'budget' && r.price_range !== 1) return false;
-    if (filters.budget === 'moderate' && r.price_range !== 2) return false;
-    if (filters.budget === 'upscale' && r.price_range < 3) return false;
+    if (filters.budget === 'budget' && r.price_range > 2) return false;  // cheap = 1-2
+    if (filters.budget === 'upscale' && r.price_range < 3) return false; // expensive = 3-4
     // 'no_limit' matches all
 
     // Meal time filter
