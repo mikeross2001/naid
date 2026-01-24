@@ -176,6 +176,8 @@ export function RestaurantRandomizer() {
       const maxIterations = 25 + Math.floor(Math.random() * 10);
       let iteration = 0;
 
+      const shuffleList = filteredByFilters;
+
       const animate = () => {
         if (iteration >= maxIterations) {
           setDisplayedRestaurant(selectedWinner);
@@ -186,8 +188,8 @@ export function RestaurantRandomizer() {
           return;
         }
 
-        const randomIndex = Math.floor(Math.random() * filteredList.length);
-        setDisplayedRestaurant(filteredList[randomIndex]);
+        const randomIndex = Math.floor(Math.random() * shuffleList.length);
+        setDisplayedRestaurant(shuffleList[randomIndex]);
         iteration++;
 
         if (iteration > maxIterations - 8) {
