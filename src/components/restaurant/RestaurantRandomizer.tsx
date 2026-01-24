@@ -509,7 +509,7 @@ export function RestaurantRandomizer() {
                             onClick={() => {
                               setWinner(null);
                               setDisplayedRestaurant(null);
-                              setGamePhase('filters');
+                              spin();
                             }}
                             className="w-full py-4 rounded-xl font-medium text-gray-600 hover:bg-gray-100 transition-all"
                           >
