@@ -132,9 +132,15 @@ export function RestaurantRandomizer() {
 
   const selectCategory = (choice: CategoryChoice) => {
     setCategory(choice);
-    setGamePhase('filters');
     // Reset filters with fresh auto-detected meal time
     setFilters(getDefaultFilterState());
+
+    if (choice === 'bar') {
+      // Skip filters for bars, go straight to spin
+      setGamePhase('idle');
+    } else {
+      setGamePhase('filters');
+    }
   };
 
   // Calculate filtered restaurants based on filters
@@ -228,12 +234,17 @@ export function RestaurantRandomizer() {
   };
 
   const handleBack = () => {
-    if (gamePhase === 'filters') {
+    if (gamePhase === 'filters' || (gamePhase === 'idle' && category === 'bar')) {
       // Go back to category selection
       setCategory(null);
       setGamePhase('idle');
+    } else if (category === 'bar') {
+      // Bar: go back to spin screen
+      setWinner(null);
+      setDisplayedRestaurant(null);
+      setGamePhase('idle');
     } else {
-      // Go back to filters from spin result
+      // Food: go back to filters from spin result
       setWinner(null);
       setDisplayedRestaurant(null);
       setGamePhase('filters');
@@ -347,11 +358,11 @@ export function RestaurantRandomizer() {
                     ← Back
                   </button>
 
-                  {/* Game Phase: Filters */}
+                  {/* Game Phase: Filters (Food only) */}
                   {gamePhase === 'filters' && (
                     <>
                       <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                        {category === 'bar' ? '🍸 Drinks Time' : '🍽️ Let\'s Eat'}
+                        🍽️ Let's Eat
                       </h2>
                       <p className="text-gray-500 mb-5">
                         Dial in your vibe
@@ -371,6 +382,35 @@ export function RestaurantRandomizer() {
                         disabled={filteredByFilters.length === 0}
                         className={`
                           w-full py-5 rounded-2xl font-bold text-xl transition-all duration-300 mt-5
+                          ${filteredByFilters.length === 0
+                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                            : 'bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 text-white hover:shadow-xl hover:scale-[1.02] active:scale-95'
+                          }
+                        `}
+                      >
+                        <span className="flex items-center justify-center gap-2">
+                          <span className="animate-bounce">🎲</span>
+                          Spin the Wheel!
+                        </span>
+                      </button>
+                    </>
+                  )}
+
+                  {/* Game Phase: Idle (Bars - no filters) */}
+                  {gamePhase === 'idle' && category === 'bar' && (
+                    <>
+                      <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                        🍸 Drinks Time
+                      </h2>
+                      <p className="text-gray-500 mb-6">
+                        {filteredByFilters.length} bars ready to go
+                      </p>
+
+                      <button
+                        onClick={spin}
+                        disabled={filteredByFilters.length === 0}
+                        className={`
+                          w-full py-5 rounded-2xl font-bold text-xl transition-all duration-300
                           ${filteredByFilters.length === 0
                             ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                             : 'bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 text-white hover:shadow-xl hover:scale-[1.02] active:scale-95'
