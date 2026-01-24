@@ -242,7 +242,14 @@ export function RestaurantRandomizer() {
 
   const goToRestaurant = () => {
     if (winner) {
-      router.push(`/restaurants/${winner.slug}`);
+      // Priority: website > Google Maps search
+      if (winner.website) {
+        window.open(winner.website, '_blank');
+      } else {
+        // Fall back to Google Maps search
+        const searchQuery = encodeURIComponent(`${winner.name} Bangkok`);
+        window.open(`https://www.google.com/maps/search/${searchQuery}`, '_blank');
+      }
       handleClose();
     }
   };
