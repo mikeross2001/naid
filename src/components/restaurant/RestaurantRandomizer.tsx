@@ -132,13 +132,19 @@ export function RestaurantRandomizer() {
 
   const selectCategory = (choice: CategoryChoice) => {
     setCategory(choice);
-    // Reset filters with fresh auto-detected meal time
-    setFilters(getDefaultFilterState());
 
     if (choice === 'bar') {
-      // Skip filters for bars, go straight to spin
+      // Skip filters for bars - set all to permissive defaults
+      setFilters({
+        budget: 'no_limit',
+        mealTime: 'any',
+        vibes: [],
+        area: 'anywhere',
+      });
       setGamePhase('idle');
     } else {
+      // Reset filters with fresh auto-detected meal time for food
+      setFilters(getDefaultFilterState());
       setGamePhase('filters');
     }
   };
